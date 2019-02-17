@@ -1,0 +1,433 @@
+<html>
+
+<head>
+    <title>Node Express服务器</title>
+    <!-- 引入CSS初始化 -->
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        #app {
+            min-width: 1000px;
+            height: 100%;
+            display: flex;
+            flex-flow: column;
+        }
+
+        .header {
+            height: 50px;
+            line-height: 50px;
+            display: flex;
+            color: #ffffff;
+            background: #3074f1;
+        }
+
+        .header .title {
+            width: 200px;
+            font-size: 18px;
+            text-align: center;
+        }
+        .header .user-info {
+            flex: 1;
+            text-align: right;
+        }
+
+        .info-wrap {
+            display: inline-block;
+        }
+        .user-name {
+            
+        }
+        img {
+            /* display: block; */
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            vertical-align: middle;
+        }
+        .avatar {
+            height: 40px;
+            width: 40px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+        }
+        .continer{
+            display: flex;
+            flex: 1; 
+        }
+
+        /* 左侧菜单 */
+        .navagater {
+            min-width: 200px;
+            max-width: 200px;
+            border-right: solid 1px #e6e6e6;
+        }
+        .nav-munu{
+
+        }
+
+        /* 包括面包屑 和主体内容 */
+        .content {
+            display: flex;
+            flex: 1;
+            flex-flow: column;
+        }
+
+        /* 面包屑样式 */
+        .brand-tab {
+            height: 40px;
+            min-height: 40px;
+            border-bottom: 1px solid #cecece;
+        }
+
+        /* 主体内容 */
+        .main {
+            flex: 1;
+            padding: 20px;
+        }
+
+        /* 底部样式 */
+        .footer{
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            min-height: 50px;
+            border-top: 1px solid #cecece;
+        }
+        #title-con{
+            text-align: center;
+        }
+        #table-wrap , #form-wrap{
+            padding: 30px;
+            border: 1px solid #cecece;
+        }
+        .button-wrap{
+            margin-bottom: 30px;
+        }
+
+    </style>
+    <!-- <link rel="stylesheet" href="./css/base.css"> -->
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="icon" href="//www.jd.com/favicon.ico" mce_href="//www.jd.com/favicon.ico" type="image/x-icon" />
+</head>
+
+<body>
+
+    <div id="app">
+        <div class="header">
+            <div class="title">后台管理项目</div>
+            <div class="user-info">
+                <div class="info-wrap">
+                    <span class="user-name">张小程</span>
+                    <img src="https://www.qqtouxiang.com/d/file/tupian/mx/20180523/jipxnu3pum2pl.jpg" alt="" class="avatar" />
+                </div>
+
+            </div>
+        </div>
+        <div class="continer">
+            <div class="navagater">
+                <div class="nav-munu">
+                    <el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose"
+                        :collapse="isCollapse">
+                        <el-submenu index="1">
+                            <template slot="title">
+                                <i class="el-icon-location"></i>
+                                <span slot="title">导航一</span>
+                            </template>
+                            <el-menu-item-group>
+                                <span slot="title">分组一</span>
+                                <el-menu-item index="1-1">选项1</el-menu-item>
+                                <el-menu-item index="1-2">选项2</el-menu-item>
+                            </el-menu-item-group>
+                            <el-menu-item-group title="分组2">
+                                <el-menu-item index="1-3">选项3</el-menu-item>
+                            </el-menu-item-group>
+                            <el-submenu index="1-4">
+                                <span slot="title">选项4</span>
+                                <el-menu-item index="1-4-1">选项1</el-menu-item>
+                            </el-submenu>
+                        </el-submenu>
+                        <el-menu-item index="2">
+                            <i class="el-icon-menu"></i>
+                            <span slot="title">导航二</span>
+                        </el-menu-item>
+                        <el-menu-item index="3" disabled>
+                            <i class="el-icon-document"></i>
+                            <span slot="title">导航三</span>
+                        </el-menu-item>
+                        <el-menu-item index="4">
+                            <i class="el-icon-setting"></i>
+                            <span slot="title">导航四</span>
+                        </el-menu-item>
+                    </el-menu>
+                </div>
+            </div>
+            <div class="content">
+                <div class="brand-tab"></div>
+                <div class="main">
+
+                    <el-table :data="tableData" style="width: 100%">
+                        <el-table-column label="日期" width="180">
+                            <template slot-scope="scope">
+                                <i class="el-icon-time"></i>
+                                <span style="margin-left: 10px">{{ scope.row.date }}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="姓名" width="180">
+                            <template slot-scope="scope">
+                                <el-popover trigger="hover" placement="top">
+                                    <p>姓名: {{ scope.row.name }}</p>
+                                    <p>住址: {{ scope.row.address }}</p>
+                                    <div slot="reference" class="name-wrapper">
+                                        <el-tag size="medium">{{ scope.row.name }}</el-tag>
+                                    </div>
+                                </el-popover>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="操作">
+                            <template slot-scope="scope">
+                                <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                                <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                    <!-- <div id="form-wrap"> -->
+                    <!-- <div>
+                        <el-form :model="form" status-icon ref="form" label-width="100px" class="demo-ruleForm">
+                            <el-form-item label="姓名" prop="name">
+                                <el-input type="text" v-model="form.name" autocomplete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="年龄" prop="age">
+                                <el-input type="number" v-model="form.age" autocomplete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="性别" prop="sex">
+                                <el-input v-model="form.sex"></el-input>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="primary" @click="post">post请求</el-button>
+                            </el-form-item>
+                        </el-form> -->
+
+                    <!-- post请求 数据表格 -->
+                    <!-- <el-table :data="formTable" style="width: 100%">
+
+                            <el-table-column prop="name" label="姓名" width="80">
+                            </el-table-column>
+
+                            <el-table-column prop="sex" label="性别" width="180">
+                            </el-table-column>
+
+                            <el-table-column prop="age" label="年龄" width="180">
+                            </el-table-column>
+
+                        </el-table> -->
+                    <!-- </div> -->
+
+                </div>
+                <div class="footer">
+                    ©1999-2019 北京XXXXX网络技术有限公司
+                </div>
+            </div>
+
+        </div>
+
+        <!-- <div id="title-con">
+            <h2>首页加载成功</h2>
+        </div>
+
+        <div id="table-wrap">
+            <div class="button-wrap">
+                <el-button type="primary" @click="get">get请求</el-button>
+            </div>
+
+            <el-table :data="tableData" style="width: 100%">
+
+                <el-table-column prop="name" label="姓名" width="80">
+                </el-table-column>
+
+                <el-table-column prop="birthday" label="出生日期" width="180">
+                </el-table-column>
+
+                <el-table-column prop="age" label="年龄" width="180">
+                </el-table-column>
+
+                <el-table-column prop="sex" label="性别">
+                </el-table-column>
+
+                <el-table-column prop="hibbit" label="爱好">
+                </el-table-column>
+
+            </el-table>
+
+        </div> -->
+
+
+
+
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script>
+        var checkAge = (rule, value, callback) => {
+            if (!value) {
+                return callback(new Error('年龄不能为空'));
+            }
+            setTimeout(() => {
+                if (!Number.isInteger(value)) {
+                    callback(new Error('请输入数字值'));
+                } else {
+                    if (value < 18) {
+                        callback(new Error('必须年满18岁'));
+                    } else {
+                        callback();
+                    }
+                }
+            }, 1000);
+        };
+        var validatePass = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('请输入密码'));
+            } else {
+                if (this.ruleForm2.checkPass !== '') {
+                    this.$refs.ruleForm2.validateField('checkPass');
+                }
+                callback();
+            }
+        };
+        var validatePass2 = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('请再次输入密码'));
+            } else if (value !== this.ruleForm2.pass) {
+                callback(new Error('两次输入密码不一致!'));
+            } else {
+                callback();
+            }
+        };
+        new Vue({
+            el: '#app',
+            data: {
+                isCollapse: false,
+                form: {
+                    name: '张三',
+                    age: 18,
+                    sex: 1,
+                },
+                formTable: [],
+                tableData1: [{
+                    "name": "于谦",
+                    "age": 50,
+                    "birthday": "1967-05-18",
+                    "sex": 1,
+                    "hibbit": ["抽烟", "喝酒", "烫头"]
+                }],
+                tableData: [{
+                    date: '2016-05-02',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                }, {
+                    date: '2016-05-04',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1517 弄'
+                }, {
+                    date: '2016-05-01',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1519 弄'
+                }, {
+                    date: '2016-05-03',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1516 弄'
+                }]
+            },
+            methods: {
+                handleEdit(index, row) {
+                    this.$confirm('编辑该文件, 是否继续?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        this.$message({
+                            type: 'success',
+                            message: '编辑成功!'
+                        });
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消编辑'
+                        });
+                    });
+                },
+                handleDelete(index, row) {
+                    this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        });
+                    });
+                },
+                handleOpen: function () {
+
+                },
+                handleClose: function () {
+
+                },
+                get: function () {
+                    var _this = this;
+                    $.ajax({
+                        url: '/get',
+                        type: 'get',
+                        dataType: 'json',
+                        success: function (result) {
+                            console.log(result.data);
+                            if (result.code == '0000') {
+                                _this.tableData.push(result.data);
+                            }
+                        }
+                    })
+                },
+                post: function () {
+                    var _this = this;
+                    console.log(this.form);
+                    var bodyy = this.form;
+
+                    // var params = JSON.stringify(bodyy);
+                    $.ajax({
+                        url: '/post',
+                        method: "post",
+                        data: bodyy,
+                        dataType: 'json',
+                        success: function (result) {
+                            console.log(result);
+                            _this.formTable.push(result);
+                        },
+                        error: function (res) {
+                            console.log(res);
+                        }
+                    })
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
