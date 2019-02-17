@@ -31,7 +31,7 @@
           <td>{{$value.author}}</td>
           <td>{{$value.category}}</td>
           <td>{{$value.desc}}</td>
-          <td><a href="#">修改</a>|<a href="#">删除</a></td>
+          <td><a href="/toEditBook?id={{$value.id}}">修改</a>|<a href="/delBook?id={{$value.id}}">删除</a></td>
         </tr>
         {{/each}}
       </tbody>

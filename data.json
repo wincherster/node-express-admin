@@ -11,7 +11,8 @@
         "name": "水浒传",
         "author": "施耐庵",
         "category": "文学",
-        "desc": "108条好汉的故事"
+        "desc": "108条好汉的故事",
+        "_locals": {}
     },
     {
         "id": "3",
@@ -35,17 +36,17 @@
         "id": 5
     },
     {
-        "name": "明朝那些事",
-        "author": "当年明月",
-        "category": "文学",
-        "desc": "明朝的历史",
-        "id": 6
-    },
-    {
         "name": "浪潮之巅",
         "author": "吴军",
         "category": "计算机",
         "desc": "IT巨头的兴衰史",
         "id": 7
+    },
+    {
+        "name": "nodejs权威指南",
+        "author": "佚名",
+        "category": "计算机",
+        "desc": "nodejs技术应用",
+        "id": 8
     }
 ]
