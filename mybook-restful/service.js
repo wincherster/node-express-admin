@@ -25,17 +25,13 @@ exports.getBookById = (req,res)=>{
   let sql = 'select * from book where id=?'
   let data =[id];
   db.base(sql,data,(result)=>{
-    if(result.affectedRows == 1){
-      res.json( result);
-    }else {
-      res.json({msg: '获取图书信息失败'});
-    }
+      res.json(result[0]);
   });
 }
 
 exports.editBook = (req,res)=>{
   let info = req.body;
-  let sql = 'update book set name=?, author=?, category=?, description=?, where id=?';
+  let sql = 'update book set name=?, author=?, category=?, description=? where id=?';
   let data =[info.name,info.author,info.category,info.description, info.id];
   db.base(sql,data,(result)=>{
     if(result.affectedRows ==1){

@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const router = require('./router.js');
 const app = express();
 
+app.use('/www', express.static('public'));
 // 挂载参数处理中间件 （post 请求）
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(router);
