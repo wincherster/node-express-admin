@@ -8,6 +8,7 @@ const service = require('./service.js');
 
 // 路由处理
 router.get('/', service.showIndex);
+router.post('/getBooks', service.getBooks);
 // 添加图书（跳转到添加图书页面）
 router.get('/toAddBook', service.toAddBook);
 // 添加图书（提交表单）
