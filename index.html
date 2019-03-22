@@ -65,8 +65,8 @@
 
         /* 左侧菜单 */
         .navagater {
-            min-width: 200px;
-            max-width: 200px;
+            /* min-width: 200px; */
+            /* max-width: 200px; */
             border-right: solid 1px #e6e6e6;
         }
         .nav-munu{
@@ -91,8 +91,12 @@
         .main {
             flex: 1;
             padding: 20px;
+						max-width: calc(100% - 65px);
+						min-width: calc(100% - 200px);
         }
-
+				.el-menu {
+					border-right: none!important;
+				}
         /* 底部样式 */
         .footer{
             height: 50px;
@@ -111,6 +115,11 @@
         .button-wrap{
             margin-bottom: 30px;
         }
+
+				.el-menu-vertical-demo:not(.el-menu--collapse) {
+    width: 200px;
+    min-height: 400px;
+  }
 
     </style>
 	<!-- <link rel="stylesheet" href="./css/base.css"> -->
@@ -136,7 +145,34 @@
 		<div class="continer">
 			<div class="navagater">
 				<div class="nav-munu">
-					<el-menu default-active="1-4-1" class="el-menu-vertical-demo">
+					<el-button icon="el-icon-search" @click="toggleNav" circle></el-button>
+					<el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse">
+						<el-submenu index="1">
+							<template slot="title">
+								<i class="el-icon-location"></i>
+								<span slot="title">导航一</span>
+							</template>
+							<el-menu-item-group>
+								<span slot="title">分组一</span>
+								<el-menu-item index="1-1">选项1</el-menu-item>
+								<el-menu-item index="1-2">选项2</el-menu-item>
+							</el-menu-item-group>
+							<el-menu-item-group title="分组2">
+								<el-menu-item index="1-3">选项3</el-menu-item>
+							</el-menu-item-group>
+							<el-submenu index="1-4">
+								<span slot="title">选项4</span>
+								<el-menu-item index="1-4-1">选项1</el-menu-item>
+							</el-submenu>
+						</el-submenu>
+						<el-menu-item index="2">
+							<i class="el-icon-menu"></i>
+							<span slot="title">导航二</span>
+						</el-menu-item>
+						<el-menu-item index="3" disabled>
+							<i class="el-icon-document"></i>
+							<span slot="title">导航三</span>
+						</el-menu-item>
 						<el-menu-item index="4">
 							<i class="el-icon-setting"></i>
 							<span slot="title">导航四</span>
@@ -145,6 +181,9 @@
 				</div>
 			</div>
 			<div class="content">
+				<div class="brand-tab">
+
+				</div>
 				<div class="main">
 					<div class="main-header">
 						<el-button type="primary" size="mini" @click="handleAddBook">添加图书</el-button>
@@ -173,8 +212,8 @@
 						</el-table-column>
 					</el-table>
 					<div class="pagination">
-						<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :total="total"
-						 :page-sizes="[5, 10, 15, 20]" :page-size="5" layout="sizes, prev, pager, next, jumper">
+						<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :total="total" :page-sizes="[5, 10, 15, 20]"
+						 :page-size="5" layout="sizes, prev, pager, next, jumper">
 						</el-pagination>
 					</div>
 
@@ -252,6 +291,7 @@
 		new Vue({
 			el: '#app',
 			data: {
+				isCollapse: true,
 				addFormShow: false,
 				editFromShow: false,
 				addFrom: {
@@ -277,6 +317,19 @@
 				this.initList();
 			},
 			methods: {
+				toggleNav() {
+					if (this.isCollapse) {
+						this.isCollapse = false;
+					} else {
+						this.isCollapse = true;
+					}
+				},
+				handleOpen(key, keyPath) {
+					console.log(key, keyPath);
+				},
+				handleClose(key, keyPath) {
+					console.log(key, keyPath);
+				},
 				handleSizeChange(val) {
 					this.pageSize = val;
 					this.initList();

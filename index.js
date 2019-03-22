@@ -56,6 +56,8 @@ const querystring = require('querystring'); // 解析如‘a=1&b=2’为对象
 // 配置路由
 app.use(router);
 
+var PORT = 3030;
+var HOST = '127.0.0.1';
 //3. 绑定端口
-app.listen(3030, '127.0.0.1');
-console.log('浏览器打开 127.0.0.1:3030');
+app.listen(PORT, HOST);
+console.log(`浏览器打开 http://${HOST}:${PORT}`);
